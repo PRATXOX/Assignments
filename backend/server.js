@@ -13,7 +13,11 @@ const app = express();
 // 🛑 1. CORS MIDDLEWARE (SABSE UPAR HONA CHAHIYE)
 // ==========================================
 app.use(cors({
-    origin: ['http://localhost:5173','https://assignments-beta-flax.vercel.app/'], // Tere Vite frontend ka exact URL
+    origin: [
+        'http://localhost:5173', 
+        'https://flowsync-sage.vercel.app',
+        'https://assignments-beta-flax.vercel.app'
+    ], // Tere Vite frontend ka exact URL
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true // Agar JWT tokens pass ho rahe hain toh ye zaroori hai
 }));
