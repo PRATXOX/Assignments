@@ -14,12 +14,12 @@ const app = express();
 // ==========================================
 app.use(cors({
     origin: [
-        'http://localhost:5173', 
+        'http://localhost:5173',
         'https://flowsync-sage.vercel.app',
         'https://assignments-beta-flax.vercel.app'
-    ], // Tere Vite frontend ka exact URL
+    ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    credentials: true // Agar JWT tokens pass ho rahe hain toh ye zaroori hai
+    credentials: true
 }));
 
 // ==========================================
