@@ -18,7 +18,7 @@ const Auth = () => {
     const endpoint = isLogin ? '/api/auth/login' : '/api/auth/signup';
     
     try {
-      const response = await fetch(`http://localhost:5000${endpoint}`, {
+      const response = await fetch(`flowsync-sage.vercel.app`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })

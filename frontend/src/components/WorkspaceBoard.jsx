@@ -63,7 +63,7 @@ const WorkspaceBoard = () => {
     }
 
     try {
-      const wsRes = await fetch('http://localhost:5000/api/workspaces', {
+      const wsRes = await fetch('flowsync-sage.vercel.app/api/workspaces', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const wsData = await wsRes.json();
