@@ -63,9 +63,13 @@ const WorkspaceBoard = () => {
     }
 
     try {
-      const wsRes = await fetch('flowsync-sage.vercel.app/api/workspaces', {
+      const wsRes = await fetch('https://flowsync-sage.vercel.app/api/workspaces', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
+      const contentType = wsRes.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error(`Server Error: Unexpected response format. Status: ${wsRes.status}`);
+      }
       const wsData = await wsRes.json();
       
       let workspaceId = null;
@@ -92,9 +96,13 @@ const WorkspaceBoard = () => {
     const token = localStorage.getItem('token');
 
     try {
-      const tktRes = await fetch(`http://localhost:5000/api/workspaces/${workspaceId}`, {
+      const tktRes = await fetch(`https://flowsync-sage.vercel.app/api/workspaces/${workspaceId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
+      const contentType = tktRes.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error(`Server Error: Unexpected response format. Status: ${tktRes.status}`);
+      }
       const tktData = await tktRes.json();
       
       if (tktData.success && tktData.data.tickets) {
@@ -120,7 +128,7 @@ const WorkspaceBoard = () => {
     setTickets(tickets.map(t => t.id === ticketId ? { ...t, status: newStatus } : t));
     
     try {
-      await fetch(`http://localhost:5000/api/tickets/${ticketId}`, {
+      const response = await fetch(`https://flowsync-sage.vercel.app/api/tickets/${ticketId}`, {
         method: 'PATCH',
         headers: { 
           'Content-Type': 'application/json',
@@ -128,6 +136,7 @@ const WorkspaceBoard = () => {
         },
         body: JSON.stringify({ status: newStatus })
       });
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     } catch (error) {
       console.error('Failed to update ticket status', error);
     }
@@ -139,7 +148,7 @@ const WorkspaceBoard = () => {
     if (!activeWorkspaceId) return;
 
     try {
-      const response = await fetch('http://localhost:5000/api/tickets', {
+      const response = await fetch('https://flowsync-sage.vercel.app/api/tickets', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -151,6 +160,10 @@ const WorkspaceBoard = () => {
           workspaceId: activeWorkspaceId
         })
       });
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error(`Server Error: Unexpected response format. Status: ${response.status}`);
+      }
       const data = await response.json();
       if (data.success) {
         const enhancedTicket = {
@@ -173,10 +186,11 @@ const WorkspaceBoard = () => {
     setTickets(tickets.filter(t => t.id !== ticketId));
 
     try {
-      await fetch(`http://localhost:5000/api/tickets/${ticketId}`, {
+      const response = await fetch(`https://flowsync-sage.vercel.app/api/tickets/${ticketId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     } catch (error) {
       console.error('Failed to delete ticket', error);
     }
@@ -186,7 +200,7 @@ const WorkspaceBoard = () => {
     e.preventDefault();
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch('http://localhost:5000/api/workspaces', {
+      const response = await fetch('https://flowsync-sage.vercel.app/api/workspaces', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -194,6 +208,10 @@ const WorkspaceBoard = () => {
         },
         body: JSON.stringify({ title: newWorkspaceTitle, name: newWorkspaceTitle })
       });
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error(`Server Error: Unexpected response format. Status: ${response.status}`);
+      }
       const data = await response.json();
       if (data.success) {
         setWorkspaces([...workspaces, data.data]);
@@ -224,10 +242,11 @@ const WorkspaceBoard = () => {
     }
 
     try {
-      await fetch(`http://localhost:5000/api/workspaces/${workspaceId}`, {
+      const response = await fetch(`https://flowsync-sage.vercel.app/api/workspaces/${workspaceId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     } catch (error) {
       console.error('Failed to delete workspace', error);
     }

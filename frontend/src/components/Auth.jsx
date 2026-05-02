@@ -18,11 +18,16 @@ const Auth = () => {
     const endpoint = isLogin ? '/api/auth/login' : '/api/auth/signup';
     
     try {
-      const response = await fetch(`flowsync-sage.vercel.app`, {
+      const response = await fetch(`https://flowsync-sage.vercel.app${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
       });
+
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error(`Server Error: Unexpected response format. Status: ${response.status}`);
+      }
 
       const data = await response.json();
 
